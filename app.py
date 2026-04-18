@@ -3,6 +3,8 @@ Smile Dental & Implant Clinic - Flask Backend
 Handles booking submissions, SMS notifications, and database management
 """
 
+from email_notify import send_email_notification 
+
 import os
 from dotenv import load_dotenv
 
@@ -18,6 +20,7 @@ import logging
 
 from database import init_db, save_booking
 from sms import send_sms_notification
+from email_notify import send_email_notification 
 
 
 # Initialize Flask app
@@ -209,6 +212,10 @@ def submit_booking():
                 logger.warning(f"SMS skipped for booking {booking_id}: {sms_result.get('error','no credentials')}")
         except Exception as sms_err:
             logger.warning(f"SMS skipped (Twilio not configured): {sms_err}")
+        try:
+            email_result = send_email_notification(booking)
+            except Exception as e:
+            logger.warning(f"Email skipped: {e}")
         
         return jsonify({
             'success': True,
