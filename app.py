@@ -214,8 +214,6 @@ def submit_booking():
             logger.warning(f"SMS skipped (Twilio not configured): {sms_err}")
         try:
             email_result = send_email_notification(booking)
-            except Exception as e:
-            logger.warning(f"Email skipped: {e}")
         
         return jsonify({
             'success': True,
